@@ -71,3 +71,27 @@ class TestRecapitation(tests.PyslimTestCase):
                     self.assertAlmostEqual(recap.node(t.root).time, 
                                            recap.slim_generation, 
                                            delta = 1e-4)
+
+
+class TestIndividualMetadata(tests.PyslimTestCase):
+    '''
+    Tests for extra stuff in Individuals.
+    '''
+
+    def test_node_derived_info(self):
+        for ts in self.get_slim_examples():
+            for ind in ts.individuals():
+                for n in ind.nodes:
+                    self.assertEqual(ts.node(n).population, ind.population)
+                    self.assertEqual(ts.node(n).time, ind.time)
+
+    @unittest.skip("for decoded metadata")
+    def test_metadata(self):
+        for ts in self.get_slim_examples():
+            for ind in ts.individuals():
+                md = decode_individual(ind.metadata)
+                self.assertEqual(md.pedigree_id, ind.metadata.pedigree_id)
+                self.assertEqual(md.age, ind.metadata.age)
+                self.assertEqual(md.population, ind.population)
+                self.assertEqual(md.sex, ind.sex)
+                self.assertEqual(md.flags, ind.flags)

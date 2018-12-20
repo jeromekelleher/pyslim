@@ -17,7 +17,8 @@ class TestProvenance(tests.PyslimTestCase):
     def get_old_slim_examples(self):
         for filename in ['tests/examples/recipe_WF.v3.0.trees',
                          'tests/examples/recipe_nonWF.v3.0.trees']:
-            yield msprime.load(filename)
+            with self.assertWarns(Warning):
+                yield msprime.load(filename)
 
     def test_provenance_creation(self):
         record = pyslim.make_pyslim_provenance_dict()
